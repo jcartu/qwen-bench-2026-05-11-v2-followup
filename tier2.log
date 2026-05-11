@@ -1,0 +1,21 @@
+[OK] Using patched harness: /home/josh/qwen-vllm-test/bench/stress-harness/stress_harness.py
+================================================================
+[20:03:56] Tier 2 Run 1: tier2-bf16-dflash-n8-mt16384-patched
+================================================================
+  [READY] in 102s
+[20:05:39] Settling 60s...
+[20:06:39] Running HumanEval mt=16384 (patched harness)...
+[20:15:45] Done. Summary:
+  pass_rate=90.9%  ok=149/164  empty=7  test_fail=8
+================================================================
+[20:15:56] Tier 2 Run 2: tier2-fp8-mtp3-mt16384-patched
+================================================================
+  [READY] in 139s
+[20:18:15] Settling 60s...
+[20:19:15] Running HumanEval mt=16384 (patched harness)...
+[20:31:42] Done. Summary:
+  pass_rate=84.8%  ok=139/164  empty=15  test_fail=10
+================================================================
+[20:31:42] Tier 2 done. Restoring SOTA on :latest...
+================================================================
+[20:31:42] DONE. Tier 2 mt=16384 complete.

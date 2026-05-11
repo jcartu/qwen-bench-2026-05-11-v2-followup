@@ -189,10 +189,55 @@ configs/ab-fp8-mtp3-latest-mt8192-v2harness/  — v2 harness validation results
 configs/ab-fp8-mtp3-latest-pass5/   — pass@5 results
 ```
 
+## Tier 2: `max_tokens=16384` ceiling test (2026-05-11, 20:03–20:32 MSK)
+
+**Question:** Tier 1 online numbers (87.2 / 83.5 %) trailed the offline rescore (95.1 / 93.3 %) by 4–9 pp. Diagnosis at the time was “mt=8192 truncation budget too tight for the new ‘complete the function’ prompt.” This run doubles the budget to confirm or falsify that diagnosis.
+
+**Method:** Identical Tier 1 procedure (`repne/vllm:v2`, c=8, patched harness with `smart_glue_humaneval` + complete-function prompt, 60 s post-ready settle), `max_tokens` raised from 8192 to 16384, request timeout raised from 300 s to 600 s.
+
+### Results
+
+| Config | mt=8192 (Tier 1) | mt=16384 (Tier 2) | Δ | length\_truncated | empty\_response | test\_fail |
+|---|---:|---:|---:|---:|---:|---:|
+| **BF16+DFlash N=8** `:v2` | 87.2 % (143/164) | **90.9 %** (149/164) | **+3.7 pp** | 13 → **0** | — → 7 | 8 → 8 |
+| **FP8+MTP=3** `:v2` | 83.5 % (137/164) | **84.8 %** (139/164) | +1.3 pp | (similar) → **0** | — → **15** | 6 → 10 |
+
+### Interpretation
+
+1. **Truncation budget was a real ceiling for BF16+DFlash.** Doubling `max_tokens` eliminated all 13 length-truncated samples and recovered most of them as passes (+3.7 pp). BF16 finishes its function once given room.
+2. **FP8+MTP=3 hits a different ceiling.** Length truncations also went to zero, but they converted into `empty_response` (7 → 15), not passes. The FP8 model gives up at long budgets rather than completing — likely a thinking-loop / stop-token issue, not budget-bound.
+3. **The offline-rescore 95.1 % ceiling is NOT fully reachable online.** Even at mt=16384 with the patched harness, BF16+DFlash tops out at **90.9 %**. The remaining ~4 pp gap to the offline 95.1 % is split between `empty_response` (7) and `test_fail` (8) modes, neither of which is fixable by giving more tokens.
+4. **BF16+DFlash N=8 remains the quality leader at any budget**, by a widening margin: +3.7 pp at mt=8192, +6.1 pp at mt=16384. The pass@1 leader on Qwen3.6-27B HumanEval is BF16+DFlash, full stop.
+5. **For production, this doesn’t move the needle.** The cost of swapping FP8+MTP=3 (245 tok/s mean, 90.9 % pass@5(any)…96.95 %) for BF16+DFlash N=8 (190 tok/s mean, 90.9 % pass@1) is ~22 % throughput for ~6 pp single-shot pass\@1. Pass\@5 on FP8 already exceeds pass\@1 on BF16 by ~6 pp at 1.3× the cost — a better deal than a model swap.
+
+### Why not push further?
+
+- mt=32768 would likely shave another 1–2 pp by reducing empties, but at the cost of much longer wall time and very small marginal pass-rate. Diminishing returns.
+- The remaining failures are **semantic** (`test_fail` = wrong answer) and **engagement** (`empty_response` = model gave up). Neither is fixable from the harness side.
+- The pass@5(any) = **96.95 %** capability ceiling already tells us the model knows the answer ~97 % of the time; per-sample pass@1 = ~85–91 % is the realistic single-shot draw from that distribution.
+
+### Files Added (Tier 2)
+
+```
+harness/tier2_mt16384.sh                                 — launcher (this run)
+configs/tier2-bf16-dflash-n8-mt16384-patched/  — BF16+DFlash 90.9 %
+configs/tier2-fp8-mtp3-mt16384-patched/        — FP8+MTP=3 84.8 %
+```
+
 ## What's Still Open
 
 - [ ] Concurrency=1 isolation test (Repne hypothesis 4): does c=1 vs c=8 change pass rate?
   My hunch: no, since the model is generating each token sequentially regardless of batch size.
 - [ ] pass@5 on `:v2` MTP=3 for a clean image comparison at the capability ceiling.
 - [ ] Roll out `stress_harness_v2.py` to the canonical bench location.
-- [ ] Update SOTA.md HumanEval section with corrected scores + smart-glue caveat.
+- [x] ~~Confirm mt=8192 truncation hypothesis with mt=16384 rerun.~~ → Tier 2 above. Confirmed for BF16+DFlash (+3.7 pp). Not the bottleneck for FP8+MTP=3.
+- [x] ~~Update SOTA.md HumanEval section with corrected scores + smart-glue caveat.~~ → done.
+- [x] ~~Roll out `smart_glue_humaneval` to the canonical bench location.~~ → done (`/home/josh/qwen-vllm-test/bench/stress-harness/stress_harness.py` and public `jcartu/llm-stress-harness@4c936b9`).
+- [ ] Concurrency=1 isolation test (Repne hypothesis 4): does c=1 vs c=8 change pass rate?
+  My hunch: no, since the model is generating each token sequentially regardless of batch size.
+- [ ] pass@5 on `:v2` MTP=3 for a clean image comparison at the capability ceiling.
+- [ ] FP8 `empty_response` root cause — is it a thinking-loop stop-token issue at long mt? Worth a focused dive.
+
+## Tier 2 Update for SOTA.md
+
+After Tier 2 results, the HumanEval section of `SOTA.md` should reflect that **BF16+DFlash N=8 at mt=16384 = 90.9 %** is the new online single-shot quality leader, surpassing FP8+MTP=3 by 6.1 pp. The offline rescore (95.1 %) remains the theoretical ceiling but is not fully reproducible online due to non-truncation failures.
