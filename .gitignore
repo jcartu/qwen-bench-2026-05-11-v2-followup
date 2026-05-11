@@ -9,3 +9,4 @@ docs/gen_images.py.template
 
 # Per-config wall time runtime data
 configs/_elapsed.csv
+.plotenv/

@@ -20,3 +20,69 @@ Gate 4 (multi-turn): PASS
 
 Gates: 4/4
   [11:18:40] throughput (15 cells, ~20 min)...
+  [11:36:52] prefill (5 contexts, ~3 min)...
+  [11:41:52] stopping container...
+  [done] speed-fp8-mtp3 in 1925s
+
+═══════════════════════════════════════════════════════════════
+[11:41:57 MSK] Phase 2/4: Speed FP8+MTP=5 on repne/vllm:v2
+  model=Qwen/Qwen3.6-27B-FP8 num_spec=5 batched=32768 capture=256
+  [ETA] v2-followup 1/4 — 1h 36m remaining → ~13:18 MSK finish
+═══════════════════════════════════════════════════════════════
+  [launch] mtp model=Qwen/Qwen3.6-27B-FP8 num_spec=5 batched=32768 cap=256
+  [READY] in 326s
+  [11:47:23] settling 60s...
+  [11:48:23] gates...
+Gate 1 (Fibonacci 5x): 5/5
+Gate 2 (Tool call): PASS
+Gate 3 (47x83=3901): PASS
+Gate 4 (multi-turn): PASS
+
+Gates: 4/4
+  [11:50:53] throughput (15 cells, ~20 min)...
+  [12:09:15] prefill (5 contexts, ~3 min)...
+  [12:14:13] stopping container...
+  [done] speed-fp8-mtp5 in 1942s
+
+═══════════════════════════════════════════════════════════════
+[12:14:19 MSK] Phase 3/4: Quality BF16+DFlash n=8 @ max_tokens=8192
+  model=Qwen/Qwen3.6-27B drafter=z-lab/Qwen3.6-27B-DFlash num_spec=8 batched=32768 capture=256
+  [ETA] v2-followup 2/4 — 1h 4m remaining → ~13:18 MSK finish
+═══════════════════════════════════════════════════════════════
+  [launch] dflash model=Qwen/Qwen3.6-27B num_spec=8 max_tokens=8192
+  [READY] in 115s
+  [12:16:14] settling 60s...
+  [12:17:14] gates...
+Gate 1 (Fibonacci 5x): 5/5
+Gate 2 (Tool call): PASS
+Gate 3 (47x83=3901): PASS
+Gate 4 (multi-turn): PASS
+
+Gates: 4/4
+  [12:17:39] HumanEval + MBPP @ c=8 max_tokens=8192 (~25 min)...
+  [12:21:40] stopping container...
+  [done] quality-bf16-dflash-n8-mt8192 in 441s
+
+═══════════════════════════════════════════════════════════════
+[12:21:40 MSK] Phase 4/4: Quality FP8+MTP=3 @ max_tokens=8192
+  model=Qwen/Qwen3.6-27B-FP8 num_spec=3 batched=32768 capture=256
+  [ETA] v2-followup 3/4 — 0h 23m remaining → ~12:45 MSK finish
+═══════════════════════════════════════════════════════════════
+  [launch] mtp model=Qwen/Qwen3.6-27B-FP8 num_spec=3 max_tokens=8192
+  [READY] in 139s
+  [12:23:59] settling 60s...
+  [12:24:59] gates...
+Gate 1 (Fibonacci 5x): 5/5
+Gate 2 (Tool call): PASS
+Gate 3 (47x83=3901): PASS
+Gate 4 (multi-turn): PASS
+
+Gates: 4/4
+  [12:27:17] HumanEval + MBPP @ c=8 max_tokens=8192 (~25 min)...
+  [12:44:24] stopping container...
+  [done] quality-fp8-mtp3-mt8192 in 1370s
+
+═══════════════════════════════════════════════════════════════
+[v2-FOLLOWUP COMPLETE] 4 phases in 1h 34m
+═══════════════════════════════════════════════════════════════
+[12:44:30 MSK] Restarting SOTA 27B service...

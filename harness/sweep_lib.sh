@@ -120,7 +120,7 @@ EOF
       --served-model-name "$SERVED_NAME" \
       --port "$PORT" \
       --tensor-parallel-size 2 \
-      --gpu-memory-utilization 0.85 \
+      --gpu-memory-utilization "${VLLM_GPU_MEM_UTIL:-0.85}" \
       --max-model-len 262144 \
       --max-num-seqs 128 \
       --max-num-batched-tokens "$max_batched" \

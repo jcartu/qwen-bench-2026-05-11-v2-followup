@@ -44,19 +44,19 @@ def accept_rate(p: Path) -> float:
 
 
 def load_quality(p: Path) -> dict:
-    """Read both humaneval.json and mbpp.json summaries."""
     d = {}
     for bench in ("humaneval", "mbpp"):
-        f = p / f"{bench}.json"
+        f = p / f"{bench}_summary.json"
         if not f.exists():
             d[bench] = None
             continue
         data = json.loads(f.read_text())
+        breakdown = data.get("failure_mode_breakdown", {})
         d[bench] = {
             "pass_rate": data.get("pass_rate", 0) * 100,
-            "n_correct": data.get("n_correct", 0),
-            "n_total": data.get("n_total", 0),
-            "n_empty": data.get("n_empty_response", 0),
+            "n_correct": breakdown.get("ok", 0),
+            "n_total": data.get("total_problems", 0),
+            "n_empty": breakdown.get("empty_response", 0),
         }
     return d
 
@@ -99,7 +99,7 @@ ax1.set_ylabel("Aggregate decode tok/s (mean of 15 cells)", fontsize=11)
 ax1.set_title("Decode throughput head-to-head\nrepne/vllm:v2 · GPU 0+1 · b=32768 c=256",
               fontsize=12)
 ax1.grid(True, alpha=0.3, axis="y")
-ax1.set_ylim(0, max(ys + [200]) * 1.18)
+ax1.set_ylim(0, max([b[3] for b in bars] + [200]) * 1.18)
 
 # Acceptance rate panel
 ars = [b[4] for b in bars]
@@ -137,7 +137,7 @@ PRIOR_FP8_QUALITY = {
     },
 }
 
-q_bf16 = load_quality(ROOT / "configs/quality-bf16-dflash-n8-mt8192")
+q_bf16 = load_quality(ROOT / "configs/quality-bf16-dflash-n8-mt8192-rerun")
 q_fp8 = load_quality(ROOT / "configs/quality-fp8-mtp3-mt8192")
 
 def safe(q, key, field):

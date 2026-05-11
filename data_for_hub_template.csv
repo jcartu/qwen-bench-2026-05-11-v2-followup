@@ -1,0 +1,5 @@
+phase,config,model,quant,num_spec,max_tokens,gates,mean_decode_tps,min_decode_tps,max_decode_tps,spec_accept_rate,humaneval_pass,humaneval_total,humaneval_pct,mbpp_pass,mbpp_total,mbpp_pct,humaneval_empty,mbpp_empty,humaneval_eff_tps,mbpp_eff_tps,humaneval_p95_s,mbpp_p95_s
+Speed,speed-fp8-mtp3,Qwen3.6-27B,FP8,3,,4/4,TODO_MEAN,TODO_MIN,TODO_MAX,TODO_AR,,,,,,,,,,,,
+Speed,speed-fp8-mtp5,Qwen3.6-27B,FP8,5,,TODO_GATES,TODO_MEAN,TODO_MIN,TODO_MAX,TODO_AR,,,,,,,,,,,,
+Quality,quality-bf16-dflash-n8-mt8192,Qwen3.6-27B,BF16,8,8192,TODO_GATES,,,,,TODO_HE_PASS,164,TODO_HE_PCT,TODO_MBPP_PASS,257,TODO_MBPP_PCT,TODO_HE_EMPTY,TODO_MBPP_EMPTY,TODO_HE_EFFTPS,TODO_MBPP_EFFTPS,TODO_HE_P95,TODO_MBPP_P95
+Quality,quality-fp8-mtp3-mt8192,Qwen3.6-27B,FP8,3,8192,TODO_GATES,,,,,TODO_HE_PASS,164,TODO_HE_PCT,TODO_MBPP_PASS,257,TODO_MBPP_PCT,TODO_HE_EMPTY,TODO_MBPP_EMPTY,TODO_HE_EFFTPS,TODO_MBPP_EFFTPS,TODO_HE_P95,TODO_MBPP_P95

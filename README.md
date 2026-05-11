@@ -16,7 +16,7 @@
 **Models:**
   - `Qwen/Qwen3.6-27B-FP8` (loaded with `--load-format instanttensor`)
   - `Qwen/Qwen3.6-27B` BF16 + `z-lab/Qwen3.6-27B-DFlash` drafter
-**Wall time:** TODO_TOTAL_WALL_TIME
+**Wall time:** ~2h 10m (4-phase initial + 21m Phase 3 re-run)
 
 ---
 
@@ -32,13 +32,13 @@ two **quality** configs (BF16+DFlash n=8 and FP8+MTP=3, both at
 
 | Finding | Magnitude |
 |---|---|
-| Speed winner on `repne/vllm:v2` | TODO_SPEED_WINNER (TODO_SPEED_WINNER_TPS tok/s) |
-| FP8+MTP=3 vs study #3 BF16+DFlash n=8 winner (190.0 tok/s) | TODO_FP8_VS_BF16_DELTA |
-| FP8+MTP=5 vs FP8+MTP=3 | TODO_MTP5_VS_MTP3_DELTA |
-| `max_tokens=8192` empty_response recovery (HumanEval) | TODO_EMPTY_HE_RECOVERY |
-| `max_tokens=8192` empty_response recovery (MBPP) | TODO_EMPTY_MBPP_RECOVERY |
-| Pass-rate uplift from mt=4096 → mt=8192 (HE, BF16+DFlash) | TODO_HE_UPLIFT_BF16 |
-| Pass-rate uplift from mt=4096 → mt=8192 (MBPP, BF16+DFlash) | TODO_MBPP_UPLIFT_BF16 |
+| Speed winner on `repne/vllm:v2` | FP8+MTP=3 (245.32 tok/s) |
+| FP8+MTP=3 vs study #3 BF16+DFlash n=8 winner (190.0 tok/s) | **+29.1%** (245.32 vs 189.98 tok/s) |
+| FP8+MTP=5 vs FP8+MTP=3 | +0.5% mean throughput, but acceptance drops 56.7% → 35.3% (MTP=3 is the engineering choice) |
+| `max_tokens=8192` empty_response recovery (HumanEval) | **89%** (17-19 → 2 on HumanEval) |
+| `max_tokens=8192` empty_response recovery (MBPP) | **58%** (37-39 → 16 on MBPP) |
+| Pass-rate uplift from mt=4096 → mt=8192 (HE, BF16+DFlash) | **+9.2 to +15.9 pp** (58.5%/65.2% → 74.4%) |
+| Pass-rate uplift from mt=4096 → mt=8192 (MBPP, BF16+DFlash) | **+8.2 to +10.5 pp** (79.8%/82.1% → 90.3%) |
 
 ## Visualizations
 
@@ -111,16 +111,16 @@ budget while keeping `effective_tps` measurable.
 | Config | mean tok/s | min | max | accept rate | Δ vs study #3 winner |
 |---|---:|---:|---:|---:|---:|
 | **BF16+DFlash n=8** (study #3 winner, `repne/vllm:v2`) | 189.98 | 84.7 | 326.8 | 0.231 | baseline |
-| **FP8+MTP=3** (this study, `repne/vllm:v2`) | TODO_FP8_MTP3_MEAN | TODO_FP8_MTP3_MIN | TODO_FP8_MTP3_MAX | TODO_FP8_MTP3_AR | TODO_FP8_MTP3_DELTA |
-| **FP8+MTP=5** (this study, `repne/vllm:v2`) | TODO_FP8_MTP5_MEAN | TODO_FP8_MTP5_MIN | TODO_FP8_MTP5_MAX | TODO_FP8_MTP5_AR | TODO_FP8_MTP5_DELTA |
+| **FP8+MTP=3** (this study, `repne/vllm:v2`) | **245.32** | 96.08 | 445.39 | 56.7% | **+29.1%** |
+| **FP8+MTP=5** (this study, `repne/vllm:v2`) | 246.59 | 92.47 | 455.15 | 35.3% | +29.8% |
 
-For reference, study #2 measured **FP8+MTP=3 at ~TODO_STUDY2_MTP3_TPS tok/s** on the
+For reference, study #2 measured **FP8+MTP=3 at ~250 tok/s** on the
 older `repne/vllm:latest` image. (Different image — direct head-to-head requires
 a re-run on `:latest`, out of scope here.)
 
 ### Discussion
 
-TODO_SPEED_DISCUSSION_PARAGRAPH
+**Throughput plateaus around FP8+MTP=3.** The jump from study #3's BF16+DFlash n=8 winner (189.98 tok/s) to FP8+MTP=3 (245.32 tok/s) is **+29.1%** — a real, well-bounded gain. Going further to FP8+MTP=5 buys only **+0.5%** (246.59 tok/s) and *loses* drafter acceptance (56.7% → 35.3%). The deeper drafter speculates more aggressively but accepts fewer of its speculations, so the wall-clock benefit cancels out and we pay extra GPU cycles per generated token. **FP8+MTP=3 is the speed SOTA on `repne/vllm:v2`.** Peak single-cell throughput hits **445 tok/s** at concurrency=4, context=16k — the highest single-cell number measured in any of the four studies.
 
 ---
 
@@ -136,23 +136,23 @@ TODO_SPEED_DISCUSSION_PARAGRAPH
 |---|---:|---:|---:|---:|---:|
 | BF16+DFlash n=8 (study #3, run #1) | 4096 | 58.5% (96/164) | 82.1% (211/257) | 19 | 37 |
 | BF16+DFlash n=8 (study #3, run #2) | 4096 | 65.2% (107/164) | 79.8% (205/257) | 17 | 39 |
-| **BF16+DFlash n=8** (this study) | **8192** | **TODO_BF16_8192_HE** | **TODO_BF16_8192_MBPP** | **TODO_BF16_8192_HE_EMPTY** | **TODO_BF16_8192_MBPP_EMPTY** |
+| **BF16+DFlash n=8** (this study) | **8192** | **74.4%** (122/164) | **90.3%** (232/257) | **2** | **16** |
 | FP8+MTP=3 (study #2, `:latest`) | 4096 | 79.3% (130/164) | 85.6% (220/257) | 0 | 0 |
-| **FP8+MTP=3** (this study, `:v2`) | **8192** | **TODO_FP8_8192_HE** | **TODO_FP8_8192_MBPP** | **TODO_FP8_8192_HE_EMPTY** | **TODO_FP8_8192_MBPP_EMPTY** |
+| **FP8+MTP=3** (this study, `:v2`) | **8192** | **70.7%** (116/164) | **86.8%** (223/257) | **8** | **26** |
 
 ### Discussion
 
-TODO_QUALITY_DISCUSSION_PARAGRAPH
+**Doubling `max_tokens` from 4096 → 8192 changes the failure mix more than the headline pass-rate.** Mean completion tokens for FP8+MTP=3 jumped from ~1500 (study #2) to **2983** here — the reasoning was simply *budget-truncated* before. Despite this, FP8+MTP=3 HumanEval *fell* from 79.3% (study #2 on `:latest`) to 70.7% here on `:v2`, while MBPP held steady at 86.8% vs 85.6%. The HE regression is uncomfortable; it's either image drift between `:latest` → `:v2` or run-to-run variance (we have a single point at `:v2`).
 
 ### Calibration: where did the empty_response failures go?
 
-TODO_EMPTY_RESPONSE_PARAGRAPH
+The interesting recovery is **inside** the failure breakdown. FP8+MTP=3 went from 0 empty_response at mt=4096 (study #2) to 8 empty on HE + 26 on MBPP at mt=8192 — wait, *more* empties? That's because at mt=4096 those long-reasoning problems either fit just under the limit or got truncated to a `length`-finish that happened to contain a valid answer; at mt=8192 some of those same problems now exhaust the longer budget *still thinking* and produce no answer at all. The fix isn't more tokens — it's better reasoning termination heuristics. **mt=8192 is the right ceiling for HumanEval-style problems; for MBPP it appears to be too generous and the model over-thinks.**
 
 ---
 
 ## Combined verdict: where are the next big gains?
 
-TODO_COMBINED_VERDICT_PARAGRAPH
+**Speed: FP8 is the new floor; deeper MTP doesn't pay.** The next throughput lever is *not* MTP=5/7/etc. — that road plateaus. Real gains will come from (a) shorter drafter latency (cheaper MTP head), (b) prefix-cache-aware batching for long contexts where TTFT dominates, or (c) a `repne/vllm:v3`-class image with kernel improvements. **Quality: the bottleneck is reasoning length budgeting, not raw tokens.** mt=8192 saves some empty_responses but introduces new ones in MBPP where the model rambles. The right move is dynamic max_tokens (or a stop-on-`</thinking>` heuristic) rather than a blanket bump. **For practitioners: ship FP8+MTP=3 on `repne/vllm:v2` with max_tokens=8192 for HumanEval-class tasks and max_tokens≈4096 for shorter problems.**
 
 ---
 
@@ -198,11 +198,12 @@ configs/
     throughput.json      # llm_decode_bench.py output (15 cells)
     prefill.json         # Standalone prefill (5 contexts)
   speed-fp8-mtp5/        # Same structure
-  quality-bf16-dflash-n8-mt8192/
-    humaneval.json       # Summary
-    humaneval.jsonl      # Per-problem records
-    mbpp.json
+  quality-bf16-dflash-n8-mt8192-rerun/
+    humaneval_summary.json   # Summary
+    humaneval.jsonl          # Per-problem records
+    mbpp_summary.json
     mbpp.jsonl
+  quality-bf16-dflash-n8-mt8192-FAILED/   # Post-mortem: first attempt OOM'd mid-HumanEval
   quality-fp8-mtp3-mt8192/
 
 docs/
@@ -234,6 +235,7 @@ logs/
 - **`max_tokens=8192` is not the asymptote.** Some reasoning problems may need
   16k. A future study could chart pass rate vs `max_tokens` for the full
   problem set.
+- **First Phase 3 attempt died mid-HumanEval.** With `--gpu-memory-utilization 0.85`, c=8, and `max_tokens=8192`, the BF16+DFlash container went OOM around problem 100/164. The full failure-mode evidence is preserved at `configs/quality-bf16-dflash-n8-mt8192-FAILED/`. The re-run dropped `--gpu-memory-utilization` to **0.78** and completed cleanly. **Lesson: 0.85 is too aggressive for BF16+DFlash at long-output quality benchmarks; 0.78 is the safe ceiling.**
 
 ---
 

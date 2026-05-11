@@ -1,0 +1,21 @@
+{
+  "config_label": "quality-bf16-dflash-n8-mt8192",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 164,
+  "sprint_wall_time_s": 239.49294543266296,
+  "failure_mode_breakdown": {
+    "ok": 66,
+    "test_fail": 25,
+    "empty_response": 2,
+    "http_error": 16,
+    "exception": 55
+  },
+  "pass_rate": 0.4024390243902439,
+  "mean_elapsed_s": 11.661980565001326,
+  "median_elapsed_s": 10.546741485595703,
+  "p95_elapsed_s": 30.13108229637146,
+  "mean_completion_tokens": 1492.5365853658536,
+  "mean_reasoning_chars": 4794.859756097561,
+  "effective_tps": 1022.0593327197709
+}

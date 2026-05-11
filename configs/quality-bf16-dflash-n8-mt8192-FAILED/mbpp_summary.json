@@ -1,0 +1,17 @@
+{
+  "config_label": "quality-bf16-dflash-n8-mt8192",
+  "benchmark": "mbpp",
+  "total_problems": 257,
+  "completed": 257,
+  "sprint_wall_time_s": 0.5461900234222412,
+  "failure_mode_breakdown": {
+    "exception": 257
+  },
+  "pass_rate": 0.0,
+  "mean_elapsed_s": 0.01399781639010062,
+  "median_elapsed_s": 0.012509346008300781,
+  "p95_elapsed_s": 0.029479265213012695,
+  "mean_completion_tokens": 0.0,
+  "mean_reasoning_chars": 0.0,
+  "effective_tps": 0.0
+}

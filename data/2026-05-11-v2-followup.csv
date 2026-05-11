@@ -1,0 +1,5 @@
+phase,config,model,quant,num_spec,max_tokens,gates,mean_decode_tps,min_decode_tps,max_decode_tps,spec_accept_rate,humaneval_pass,humaneval_total,humaneval_pct,mbpp_pass,mbpp_total,mbpp_pct,humaneval_empty,mbpp_empty,humaneval_eff_tps,mbpp_eff_tps,humaneval_p95_s,mbpp_p95_s
+Speed,speed-fp8-mtp3,Qwen3.6-27B,FP8,3,,4/4,245.32,96.08,445.39,0.567,,,,,,,,,,,
+Speed,speed-fp8-mtp5,Qwen3.6-27B,FP8,5,,4/4,246.59,92.47,455.15,0.353,,,,,,,,,,,
+Quality,quality-bf16-dflash-n8-mt8192,Qwen3.6-27B,BF16,8,8192,4/4,,,,,122,164,0.7439,232,257,0.9027,2,16,1037.09,1015.24,39.90,56.69
+Quality,quality-fp8-mtp3-mt8192,Qwen3.6-27B,FP8,3,8192,4/4,,,,,116,164,0.7073,223,257,0.8677,8,26,1113.33,1117.92,46.86,55.60
