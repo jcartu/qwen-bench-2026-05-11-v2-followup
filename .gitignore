@@ -1,0 +1,11 @@
+# Container logs are noisy and large
+**/server.log
+**/throughput.log
+**/prefill.log
+logs/launch.out
+
+# Templates (private to working session)
+docs/gen_images.py.template
+
+# Per-config wall time runtime data
+configs/_elapsed.csv

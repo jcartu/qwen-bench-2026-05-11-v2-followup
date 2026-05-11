@@ -1,0 +1,22 @@
+[11:09:52 MSK] v2-followup study starting
+  STUDY_ROOT=/tmp/qwen-bench-2026-05-11-v2-followup
+  IMAGE=repne/vllm:v2
+  GPUs: GPU-ba6334bc-6fec-5f2c-df75-a887bbca476e, GPU-538bf008-7ff2-0d1d-69e9-20db81a00459
+
+
+═══════════════════════════════════════════════════════════════
+[11:09:52 MSK] Phase 1/4: Speed FP8+MTP=3 on repne/vllm:v2
+  model=Qwen/Qwen3.6-27B-FP8 num_spec=3 batched=32768 capture=256
+  [ETA] v2-followup 0/4 starting
+═══════════════════════════════════════════════════════════════
+  [launch] mtp model=Qwen/Qwen3.6-27B-FP8 num_spec=3 batched=32768 cap=256
+  [READY] in 313s
+  [11:15:06] settling 60s...
+  [11:16:06] gates...
+Gate 1 (Fibonacci 5x): 5/5
+Gate 2 (Tool call): PASS
+Gate 3 (47x83=3901): PASS
+Gate 4 (multi-turn): PASS
+
+Gates: 4/4
+  [11:18:40] throughput (15 cells, ~20 min)...
