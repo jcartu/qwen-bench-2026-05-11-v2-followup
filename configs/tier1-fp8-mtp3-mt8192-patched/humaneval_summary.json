@@ -1,0 +1,19 @@
+{
+  "config_label": "tier1-fp8-mtp3-mt8192-patched",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 164,
+  "sprint_wall_time_s": 615.8917679786682,
+  "failure_mode_breakdown": {
+    "ok": 137,
+    "empty_response": 21,
+    "test_fail": 6
+  },
+  "pass_rate": 0.8353658536585366,
+  "mean_elapsed_s": 29.24937880039215,
+  "median_elapsed_s": 19.34070920944214,
+  "p95_elapsed_s": 58.86870193481445,
+  "mean_completion_tokens": 3460.3353658536585,
+  "mean_reasoning_chars": 10516.969512195123,
+  "effective_tps": 921.4200116077141
+}

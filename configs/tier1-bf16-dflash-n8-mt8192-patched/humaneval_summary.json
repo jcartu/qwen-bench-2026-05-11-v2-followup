@@ -1,0 +1,19 @@
+{
+  "config_label": "tier1-bf16-dflash-n8-mt8192-patched",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 164,
+  "sprint_wall_time_s": 447.23467993736267,
+  "failure_mode_breakdown": {
+    "ok": 143,
+    "empty_response": 13,
+    "test_fail": 8
+  },
+  "pass_rate": 0.8719512195121951,
+  "mean_elapsed_s": 21.2549204361148,
+  "median_elapsed_s": 16.468422889709473,
+  "p95_elapsed_s": 60.17671823501587,
+  "mean_completion_tokens": 3010.560975609756,
+  "mean_reasoning_chars": 9048.55487804878,
+  "effective_tps": 1103.966266813543
+}
