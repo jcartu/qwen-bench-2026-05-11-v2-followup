@@ -1,0 +1,12 @@
+{
+  "jsonl": "/tmp/qwen-bench-2026-05-11-v2-followup/configs/ab-fp8-mtp3-latest-mt8192-v2harness/humaneval.jsonl",
+  "total": 164,
+  "orig_pass": 142,
+  "orig_pass_rate": 0.8658536585365854,
+  "recovered_via_smart_glue": 0,
+  "corrected_pass": 142,
+  "corrected_pass_rate": 0.8658536585365854,
+  "remaining_failures": 7,
+  "truncated_at_max_tokens": 15,
+  "other_empty_response": 0
+}

@@ -1,0 +1,19 @@
+{
+  "config_label": "ab-fp8-mtp3-latest-mt8192",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 164,
+  "sprint_wall_time_s": 441.60131883621216,
+  "failure_mode_breakdown": {
+    "ok": 123,
+    "test_fail": 35,
+    "empty_response": 6
+  },
+  "pass_rate": 0.75,
+  "mean_elapsed_s": 20.737284805716538,
+  "median_elapsed_s": 17.764776468276978,
+  "p95_elapsed_s": 47.043214321136475,
+  "mean_completion_tokens": 2922.621951219512,
+  "mean_reasoning_chars": 9314.94512195122,
+  "effective_tps": 1085.3907802249428
+}

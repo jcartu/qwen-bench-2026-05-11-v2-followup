@@ -1,0 +1,12 @@
+{
+  "jsonl": "/tmp/qwen-bench-2026-05-11-v2-followup/configs/quality-bf16-dflash-n8-mt8192-rerun/humaneval.jsonl",
+  "total": 164,
+  "orig_pass": 122,
+  "orig_pass_rate": 0.7439024390243902,
+  "recovered_via_smart_glue": 34,
+  "corrected_pass": 156,
+  "corrected_pass_rate": 0.9512195121951219,
+  "remaining_failures": 6,
+  "truncated_at_max_tokens": 2,
+  "other_empty_response": 0
+}

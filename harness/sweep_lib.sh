@@ -23,7 +23,7 @@ set -euo pipefail
 STUDY_ROOT="${STUDY_ROOT:-/tmp/qwen-bench-2026-05-11-v2-followup}"
 PORT="${PORT:-11435}"
 IMAGE="${IMAGE:-repne/vllm:v2}"
-CONTAINER_NAME="vllm-v2-followup"
+CONTAINER_NAME="${CONTAINER_NAME:-vllm-v2-followup}"
 GPU_0_UUID="GPU-ba6334bc-6fec-5f2c-df75-a887bbca476e"
 GPU_1_UUID="GPU-538bf008-7ff2-0d1d-69e9-20db81a00459"
 

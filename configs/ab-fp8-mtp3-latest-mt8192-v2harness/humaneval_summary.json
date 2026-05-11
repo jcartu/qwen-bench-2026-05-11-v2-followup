@@ -1,0 +1,19 @@
+{
+  "config_label": "ab-fp8-mtp3-latest-mt8192-v2harness",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 164,
+  "sprint_wall_time_s": 488.3986303806305,
+  "failure_mode_breakdown": {
+    "ok": 142,
+    "empty_response": 15,
+    "test_fail": 7
+  },
+  "pass_rate": 0.8658536585365854,
+  "mean_elapsed_s": 22.493988188301646,
+  "median_elapsed_s": 18.588378310203552,
+  "p95_elapsed_s": 55.86906456947327,
+  "mean_completion_tokens": 3307.298780487805,
+  "mean_reasoning_chars": 9933.59756097561,
+  "effective_tps": 1110.5620824065093
+}

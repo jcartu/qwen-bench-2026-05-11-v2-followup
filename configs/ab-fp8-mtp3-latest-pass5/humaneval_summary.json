@@ -1,0 +1,24 @@
+{
+  "config_label": "ab-fp8-mtp3-latest-pass5",
+  "benchmark": "humaneval",
+  "total_problems": 164,
+  "completed": 820,
+  "sprint_wall_time_s": 1263.7659809589386,
+  "failure_mode_breakdown": {
+    "ok": 695,
+    "test_fail": 30,
+    "empty_response": 95
+  },
+  "pass_rate": 0.8475609756097561,
+  "mean_elapsed_s": 60.53417531891567,
+  "median_elapsed_s": 56.87227690219879,
+  "p95_elapsed_s": 101.73062634468079,
+  "mean_completion_tokens": 3473.5304878048782,
+  "mean_reasoning_chars": 10662.426829268292,
+  "effective_tps": 2253.8152180981556,
+  "n_problems": 164,
+  "n_samples_per_problem": 5,
+  "temperature": 0.8,
+  "pass_at_k_any": 0.9695121951219512,
+  "pass_at_k_all": 0.5853658536585366
+}
